@@ -58,7 +58,7 @@ def random_location(image):
     return K.random_uniform((K.shape(image)[0], 2), minval=-1., maxval=1.)
 
 #----------Begin location network----------#
-def transform_loc(args):
+def randomize_loc(args):
     loc, mean = args
     mean = K.clip(mean, -1., 1.)
     mean = K.stop_gradient(mean)
@@ -69,8 +69,8 @@ def transform_loc(args):
 
 loc_in = Input(shape=(2,))
 loc_mean = Dense(config.loc_dim)(loc_in)
-next_loc = Lambda(transform_loc)([loc_in, loc_mean])
-loc_net = Model(loc_in, next_loc)
+next_loc = Lambda(randomize_loc)([loc_in, loc_mean])
+loc_net = Model(inputs=[loc_in], outputs=[next_loc, loc_mean])
 #----------End location network----------#
 
 loc_mean_arr = []
