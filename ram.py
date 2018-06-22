@@ -8,7 +8,6 @@ from keras.layers import LSTM, LSTMCell
 from keras.models import Model
 from matplotlib import pyplot as plt
 from config import Config
-from glimpse import GlimpseNet, LocNet
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
@@ -94,9 +93,8 @@ init_loc = Lambda(random_location)(x)
 glimpse = glimpse_net([init_loc, x])
 
 lstm_cell = LSTMCell(config.cell_size)
-output = outputs[-1]
 
-predictions = Dense(config.num_classes, activation='softmax')(output)
+predictions = Dense(config.num_classes, activation='softmax')(x)
 
 model = Model(x, predictions)
 model.compile(loss=keras.losses.categorical_crossentropy, optimizer='Adam', metrics=['accuracy'])
